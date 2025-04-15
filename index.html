@@ -9,28 +9,98 @@
       font-family: Arial;
       margin: 0;
       padding: 0;
-      background-color: #eee;
+      background-image: url('https://cdn.pixabay.com/photo/2016/11/29/03/53/space-1867611_1280.jpg');
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+      height: 100vh;
+      color: white;
+    }
+
+    #girisEkrani {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.6);
+    }
+
+    #kureSecmeEkrani {
+      display: none;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      text-align: center;
+      padding-top: 100px;
+    }
+
+    #kureSecmeEkrani button {
+      margin: 10px;
+      padding: 15px 25px;
+      font-size: 18px;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    .kure1 { background-color: crimson; }
+    .kure2 { background-color: royalblue; }
+    .kure3 { background-color: seagreen; }
+    .kure4 { background-color: purple; }
+    .kure5 { background-color: orange; }
+
+    #oyunEkrani {
+      display: none;
+      background-color: rgba(0, 0, 0, 0.6);
+      color: white;
       height: 100vh;
     }
 
-    h1 {
-      color: red;
-      margin-top: 30px;
+    #ustBilgi {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 10px;
+      gap: 10px;
+      flex-wrap: wrap;
     }
 
+    #isimKutusu,
     #puan {
-      font-size: 30px;
-      margin: 20px;
+      font-size: 18px;
+      font-weight: bold;
+      border: 2px solid cyan;
+      padding: 4px 8px;
+      border-radius: 6px;
+      background-color: rgba(0, 0, 0, 0.5);
+      color: white;
+    }
+
+    #rekorPuanKutusu,
+    #sonPuanKutusu {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 10px auto;
+      border: 2px solid cyan;
+      padding: 6px 12px;
+      background-color: rgba(0, 0, 0, 0.5);
+      border-radius: 8px;
+      display: block;
+      text-align: center;
+      width: fit-content;
     }
 
     #oyunAlani {
       position: relative;
       width: 100%;
-      height: 80vh;
-      background-color: #444;
+      height: 60vh;
+      background-color: rgba(0, 0, 0, 0.5);
       overflow: hidden;
-      border: 5px solid Brown; /* Çerçeve buraya eklendi */
+      border: 5px solid cyan;
       box-sizing: border-box;
+      border-radius: 10px;
     }
 
     #top {
@@ -41,113 +111,265 @@
       border-radius: 50%;
       cursor: pointer;
       display: none;
+      transition: left 0.5s linear, top 0.5s linear;
     }
 
     #yenidenBaslat {
       display: none;
-      margin-top: 100px;
-      padding: 60px 80px;
-      font-size: 30px;
+      margin-top: 40px;
+      padding: 20px 40px;
+      font-size: 22px;
       background-color: orange;
       border: none;
       border-radius: 10px;
       color: white;
       cursor: pointer;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+    }
+
+    #oyunaBaslaBtn, #isimGonderBtn {
+      padding: 15px 30px;
+      font-size: 20px;
+      margin: 10px;
+      background-color: darkorange;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #isimAlani {
+      display: none;
+      margin-top: 20px;
+    }
+
+    input[type="text"] {
+      padding: 10px;
+      font-size: 18px;
+      border-radius: 5px;
+      border: none;
+      margin-bottom: 10px;
+    }
+
+    @media (max-width: 600px) {
+      #ustBilgi {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      #rekorPuanKutusu,
+      #sonPuanKutusu {
+        font-size: 16px;
+        padding: 4px 10px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <h1>Siyah Küre Tıklama Oyunu</h1>
-  <div id="puan">Puan: 0</div>
+<div id="girisEkrani">
+  <h1>Hoş geldin bu benim ilk oyunum</h1>
+  <button id="oyunaBaslaBtn" onclick="isimIstegi()">Oyuna Başla</button>
+
+  <div id="isimAlani">
+    <input type="text" id="isimInput" placeholder="İsmini gir...">
+    <br>
+    <button id="isimGonderBtn" onclick="oyunuBaslat()">Gönder</button>
+  </div>
+</div>
+
+<div id="kureSecmeEkrani">
+  <h2>Küreni Seç</h2>
+  <button class="kure1" onclick="kureSec(1)">Küre 1</button>
+  <button class="kure2" onclick="kureSec(2)">Küre 2</button>
+  <button class="kure3" onclick="kureSec(3)">Küre 3</button>
+  <button class="kure4" onclick="kureSec(4)">Küre 4</button>
+  <button class="kure5" onclick="kureSec(5)">Küre 5</button>
+</div>
+
+<div id="oyunEkrani">
+  <div id="ustBilgi">
+    <div id="isimKutusu">Oyuncu: </div>
+    <div id="puan">Puan: 0</div>
+  </div>
 
   <div id="oyunAlani" onclick="disariTikla(event)">
     <div id="top" onclick="tikla(event)"></div>
   </div>
 
+  <div id="rekorPuanKutusu">Rekor Puan: 0</div>
+  <div id="sonPuanKutusu">Son Puan: 0</div>
+
   <button id="yenidenBaslat" onclick="oyunuBaslat()">Yeniden Başla</button>
-
   <audio id="oyunMuzik" src="https://www.bensound.com/bensound-music/bensound-funkyelement.mp3"></audio>
+</div>
 
-  <script>
-    let puan = 0;
-    let muzikCaldi = false;
-    let zamanlayici;
+<script>
+  let puan = 0;
+  let muzikCaldi = false;
+  let zamanlayici;
+  let kullaniciIsmi = "";
+  let secilenKure = 1;
+  let hareketEtInterval;
 
-    function zamanHesapla() {
-      if (puan >= 50) return 800;
-      if (puan >= 30) return 1000;
-      if (puan >= 20) return 1200;
-      return 1500;
-    }
+  function isimIstegi() {
+    document.getElementById("oyunaBaslaBtn").style.display = "none";
+    document.getElementById("isimAlani").style.display = "block";
+  }
 
-    function rastgeleKonum() {
-      const oyunAlani = document.getElementById("oyunAlani");
-      const top = document.getElementById("top");
+  function zamanHesapla() {
+    if (secilenKure === 2) return 800;
+    if (puan >= 50) return 800;
+    if (puan >= 30) return 1000;
+    if (puan >= 20) return 1200;
+    return 1500;
+  }
 
-      const maxX = oyunAlani.clientWidth - top.offsetWidth;
-      const maxY = oyunAlani.clientHeight - top.offsetHeight;
+  function rastgeleKonum(kayarak = false) {
+    const oyunAlani = document.getElementById("oyunAlani");
+    const top = document.getElementById("top");
+    const maxX = oyunAlani.clientWidth - top.offsetWidth;
+    const maxY = oyunAlani.clientHeight - top.offsetHeight;
+    const randomX = Math.floor(Math.random() * maxX);
+    const randomY = Math.floor(Math.random() * maxY);
 
-      const randomX = Math.floor(Math.random() * maxX);
-      const randomY = Math.floor(Math.random() * maxY);
-
+    if (kayarak) {
       top.style.left = randomX + "px";
       top.style.top = randomY + "px";
+    } else {
+      top.style.transition = "none";
+      top.style.left = randomX + "px";
+      top.style.top = randomY + "px";
+      setTimeout(() => {
+        top.style.transition = "left 0.5s linear, top 0.5s linear";
+      }, 10);
+    }
+  }
+
+  function sifirla() {
+    document.getElementById("top").style.display = "none";
+    document.getElementById("yenidenBaslat").style.display = "inline-block";
+    muzikCaldi = false;
+    document.getElementById("oyunMuzik").pause();
+    document.getElementById("oyunMuzik").currentTime = 0;
+
+    clearInterval(hareketEtInterval);
+    clearTimeout(zamanlayici);
+
+    document.getElementById("sonPuanKutusu").innerText = "Son Puan: " + puan;
+
+    if (puan > Number(localStorage.getItem("rekorPuan") || 0)) {
+      localStorage.setItem("rekorPuan", puan);
     }
 
-    function sifirla() {
-      puan = 0;
-      document.getElementById("puan").innerText = "Puan: 0";
-      document.getElementById("top").style.display = "none";
-      document.getElementById("yenidenBaslat").style.display = "inline-block";
-      muzikCaldi = false;
-      document.getElementById("oyunMuzik").pause();
-      document.getElementById("oyunMuzik").currentTime = 0;
-    }
+    document.getElementById("rekorPuanKutusu").innerText = "Rekor Puan: " + localStorage.getItem("rekorPuan");
 
-    function tikla(event) {
-      event.stopPropagation();
+    puan = 0;
+    document.getElementById("puan").innerText = "Puan: 0";
+  }
+
+  function tikla(event) {
+    event.stopPropagation();
+
+    if (secilenKure === 4) {
+      puan += 2;
+    } else {
       puan++;
-      document.getElementById("puan").innerText = "Puan: " + puan;
+    }
 
-      if (!muzikCaldi) {
-        document.getElementById("oyunMuzik").play();
-        muzikCaldi = true;
-      }
+    document.getElementById("puan").innerText = "Puan: " + puan;
 
+    let yeniBoyut = 120 - puan * 2;
+    if (yeniBoyut < 50) yeniBoyut = 50;
+
+    const top = document.getElementById("top");
+    if (secilenKure === 3 && puan === 1) {
+      top.style.width = "60px";
+      top.style.height = "60px";
+    } else {
+      top.style.width = yeniBoyut + "px";
+      top.style.height = yeniBoyut + "px";
+    }
+
+    if (!muzikCaldi) {
+      document.getElementById("oyunMuzik").play();
+      muzikCaldi = true;
+    }
+
+    if (secilenKure !== 5) {
       rastgeleKonum();
+    }
 
+    clearTimeout(zamanlayici);
+    zamanlayici = setTimeout(() => {
+      sifirla();
+    }, zamanHesapla());
+  }
+
+  function disariTikla(event) {
+    const top = document.getElementById("top");
+    if (!top.contains(event.target)) {
       clearTimeout(zamanlayici);
-      zamanlayici = setTimeout(() => {
-        sifirla();
-      }, zamanHesapla());
+      sifirla();
+    }
+  }
+
+  function oyunuBaslat() {
+    kullaniciIsmi = document.getElementById("isimInput").value;
+    if (!kullaniciIsmi) {
+      alert("Lütfen ismini gir!");
+      return;
     }
 
-    function disariTikla(event) {
-      const top = document.getElementById("top");
-      if (!top.contains(event.target)) {
-        clearTimeout(zamanlayici);
-        sifirla();
-      }
+    document.getElementById("girisEkrani").style.display = "none";
+    document.getElementById("isimAlani").style.display = "none";
+    document.getElementById("kureSecmeEkrani").style.display = "block";
+  }
+
+  function kureSec(numara) {
+    secilenKure = numara;
+    document.getElementById("kureSecmeEkrani").style.display = "none";
+    document.getElementById("oyunEkrani").style.display = "block";
+
+    document.getElementById("isimKutusu").innerText = "Oyuncu: " + kullaniciIsmi;
+    document.getElementById("rekorPuanKutusu").innerText = "Rekor Puan: " + (localStorage.getItem("rekorPuan") || 0);
+    document.getElementById("sonPuanKutusu").innerText = "Son Puan: 0";
+
+    document.getElementById("yenidenBaslat").style.display = "none";
+    const top = document.getElementById("top");
+    top.style.display = "block";
+
+    if (secilenKure === 3) {
+      top.style.width = "60px";
+      top.style.height = "60px";
+    } else {
+      top.style.width = "120px";
+      top.style.height = "120px";
     }
 
-    function oyunuBaslat() {
-      document.getElementById("yenidenBaslat").style.display = "none";
-      document.getElementById("top").style.display = "block";
-      puan = 0;
-      document.getElementById("puan").innerText = "Puan: 0";
-      muzikCaldi = false;
-      rastgeleKonum();
-      clearTimeout(zamanlayici);
-      zamanlayici = setTimeout(() => {
-        sifirla();
-      }, zamanHesapla());
-    }
+    puan = 0;
+    document.getElementById("puan").innerText = "Puan: 0";
+    muzikCaldi = false;
 
-    window.onload = function () {
-      document.getElementById("top").style.display = "none";
-    };
-  </script>
+    rastgeleKonum(secilenKure === 5);
+
+    clearTimeout(zamanlayici);
+    zamanlayici = setTimeout(() => {
+      sifirla();
+    }, zamanHesapla());
+
+    if (secilenKure === 5) {
+      hareketEtInterval = setInterval(() => rastgeleKonum(true), 1000);
+    }
+  }
+
+  window.onload = function () {
+    document.getElementById("top").style.display = "none";
+  };
+</script>
 
 </body>
 </html>
