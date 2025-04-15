@@ -212,7 +212,7 @@
   let muzikCaldi = false;
   let zamanlayici;
   let kullaniciIsmi = "";
-  let secilenKure = 1;
+  let secilenKure = 0;
   let hareketEtInterval;
 
   function isimIstegi() {
@@ -318,55 +318,60 @@
   }
 
   function oyunuBaslat() {
-    kullaniciIsmi = document.getElementById("isimInput").value;
-    if (!kullaniciIsmi) {
-      alert("Lütfen ismini gir!");
-      return;
+    if (kullaniciIsmi && secilenKure) {
+      document.getElementById("girisEkrani").style.display = "none";
+      document.getElementById("kureSecmeEkrani").style.display = "none";
+      document.getElementById("oyunEkrani").style.display = "block";
+
+      document.getElementById("isimKutusu").innerText = "Oyuncu: " + kullaniciIsmi;
+      document.getElementById("rekorPuanKutusu").innerText = "Rekor Puan: " + (localStorage.getItem("rekorPuan") || 0);
+      document.getElementById("sonPuanKutusu").innerText = "Son Puan: 0";
+
+      const top = document.getElementById("top");
+      top.style.display = "block";
+
+      if (secilenKure === 3) {
+        top.style.width = "60px";
+        top.style.height = "60px";
+      } else {
+        top.style.width = "120px";
+        top.style.height = "120px";
+      }
+
+      puan = 0;
+      document.getElementById("puan").innerText = "Puan: 0";
+      muzikCaldi = false;
+
+      rastgeleKonum(secilenKure === 5);
+
+      clearTimeout(zamanlayici);
+      zamanlayici = setTimeout(() => {
+        sifirla();
+      }, zamanHesapla());
+
+      if (secilenKure === 5) {
+        hareketEtInterval = setInterval(() => rastgeleKonum(true), 1000);
+      }
+
+      document.getElementById("yenidenBaslat").style.display = "none";
+    } else {
+      kullaniciIsmi = document.getElementById("isimInput").value;
+      if (!kullaniciIsmi) {
+        alert("Lütfen ismini gir!");
+        return;
+      }
+
+      document.getElementById("girisEkrani").style.display = "none";
+      document.getElementById("isimAlani").style.display = "none";
+      document.getElementById("kureSecmeEkrani").style.display = "block";
+
+      document.getElementById("yenidenBaslat").style.display = "none";
     }
-
-    document.getElementById("girisEkrani").style.display = "none";
-    document.getElementById("isimAlani").style.display = "none";
-    document.getElementById("kureSecmeEkrani").style.display = "block";
-
-    // Yeniden başlat butonu gizlensin
-    document.getElementById("yenidenBaslat").style.display = "none";
   }
 
   function kureSec(numara) {
     secilenKure = numara;
-    document.getElementById("kureSecmeEkrani").style.display = "none";
-    document.getElementById("oyunEkrani").style.display = "block";
-
-    document.getElementById("isimKutusu").innerText = "Oyuncu: " + kullaniciIsmi;
-    document.getElementById("rekorPuanKutusu").innerText = "Rekor Puan: " + (localStorage.getItem("rekorPuan") || 0);
-    document.getElementById("sonPuanKutusu").innerText = "Son Puan: 0";
-
-    document.getElementById("yenidenBaslat").style.display = "none";
-    const top = document.getElementById("top");
-    top.style.display = "block";
-
-    if (secilenKure === 3) {
-      top.style.width = "60px";
-      top.style.height = "60px";
-    } else {
-      top.style.width = "120px";
-      top.style.height = "120px";
-    }
-
-    puan = 0;
-    document.getElementById("puan").innerText = "Puan: 0";
-    muzikCaldi = false;
-
-    rastgeleKonum(secilenKure === 5);
-
-    clearTimeout(zamanlayici);
-    zamanlayici = setTimeout(() => {
-      sifirla();
-    }, zamanHesapla());
-
-    if (secilenKure === 5) {
-      hareketEtInterval = setInterval(() => rastgeleKonum(true), 1000);
-    }
+    oyunuBaslat();
   }
 
   window.onload = function () {
