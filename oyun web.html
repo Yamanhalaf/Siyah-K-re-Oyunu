@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <title>Tıklama Oyunu</title>
+  <style>
+    body {
+      text-align: center;
+      font-family: Arial;
+      margin: 0;
+      padding: 0;
+      background-color: #eee;
+      height: 100vh;
+    }
+
+    h1 {
+      color: red;
+      margin-top: 30px;
+    }
+
+    #puan {
+      font-size: 30px;
+      margin: 20px;
+    }
+
+    #oyunAlani {
+      position: relative;
+      width: 100%;
+      height: 80vh;
+      background-color: #444;
+      overflow: hidden;
+      border: 5px solid Brown; /* Çerçeve buraya eklendi */
+      box-sizing: border-box;
+    }
+
+    #top {
+      position: absolute;
+      width: 120px;
+      height: 120px;
+      background-color: black;
+      border-radius: 50%;
+      cursor: pointer;
+      display: none;
+    }
+
+    #yenidenBaslat {
+      display: none;
+      margin-top: 100px;
+      padding: 60px 80px;
+      font-size: 30px;
+      background-color: orange;
+      border: none;
+      border-radius: 10px;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Siyah Küre Tıklama Oyunu</h1>
+  <div id="puan">Puan: 0</div>
+
+  <div id="oyunAlani" onclick="disariTikla(event)">
+    <div id="top" onclick="tikla(event)"></div>
+  </div>
+
+  <button id="yenidenBaslat" onclick="oyunuBaslat()">Yeniden Başla</button>
+
+  <audio id="oyunMuzik" src="https://www.bensound.com/bensound-music/bensound-funkyelement.mp3"></audio>
+
+  <script>
+    let puan = 0;
+    let muzikCaldi = false;
+    let zamanlayici;
+
+    function zamanHesapla() {
+      if (puan >= 50) return 800;
+      if (puan >= 30) return 1000;
+      if (puan >= 20) return 1200;
+      return 1500;
+    }
+
+    function rastgeleKonum() {
+      const oyunAlani = document.getElementById("oyunAlani");
+      const top = document.getElementById("top");
+
+      const maxX = oyunAlani.clientWidth - top.offsetWidth;
+      const maxY = oyunAlani.clientHeight - top.offsetHeight;
+
+      const randomX = Math.floor(Math.random() * maxX);
+      const randomY = Math.floor(Math.random() * maxY);
+
+      top.style.left = randomX + "px";
+      top.style.top = randomY + "px";
+    }
+
+    function sifirla() {
+      puan = 0;
+      document.getElementById("puan").innerText = "Puan: 0";
+      document.getElementById("top").style.display = "none";
+      document.getElementById("yenidenBaslat").style.display = "inline-block";
+      muzikCaldi = false;
+      document.getElementById("oyunMuzik").pause();
+      document.getElementById("oyunMuzik").currentTime = 0;
+    }
+
+    function tikla(event) {
+      event.stopPropagation();
+      puan++;
+      document.getElementById("puan").innerText = "Puan: " + puan;
+
+      if (!muzikCaldi) {
+        document.getElementById("oyunMuzik").play();
+        muzikCaldi = true;
+      }
+
+      rastgeleKonum();
+
+      clearTimeout(zamanlayici);
+      zamanlayici = setTimeout(() => {
+        sifirla();
+      }, zamanHesapla());
+    }
+
+    function disariTikla(event) {
+      const top = document.getElementById("top");
+      if (!top.contains(event.target)) {
+        clearTimeout(zamanlayici);
+        sifirla();
+      }
+    }
+
+    function oyunuBaslat() {
+      document.getElementById("yenidenBaslat").style.display = "none";
+      document.getElementById("top").style.display = "block";
+      puan = 0;
+      document.getElementById("puan").innerText = "Puan: 0";
+      muzikCaldi = false;
+      rastgeleKonum();
+      clearTimeout(zamanlayici);
+      zamanlayici = setTimeout(() => {
+        sifirla();
+      }, zamanHesapla());
+    }
+
+    window.onload = function () {
+      document.getElementById("top").style.display = "none";
+    };
+  </script>
+
+</body>
+</html>
